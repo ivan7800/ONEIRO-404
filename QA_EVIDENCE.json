@@ -1,0 +1,150 @@
+{
+  "browser": "134.0.6998.35",
+  "checks": [
+    "production boot, local scripts, CSP, IndexedDB and real Service Worker",
+    "25 live view/viewport combinations without horizontal overflow",
+    "empty session validation, configuration save, real Web Audio preview/silence",
+    "six protocols start and terminate independently",
+    "Lucid pause/skip, reload, resume, audio toggle, timed phases and recall in IndexedDB",
+    "delete session dream remains deleted after reload and legacy migration",
+    "journal empty validation, create/edit, XSS text, search/filter/sort/clear and editor close",
+    "double journal submission creates one entry",
+    "real Lab statistics, time window, map node, category and reset",
+    "seven skins, privacy/visual preferences, 320px large text, PIN mismatch, lock and wrong/right unlock",
+    "actual JSON/encrypted downloads and UI replace/merge restore with real Crypto and PIN retained",
+    "disable PIN, request storage persistence with actual browser decision",
+    "keyboard routes, search shortcut, editor focus and Escape return",
+    "offline reload, IndexedDB preserved and five routes via real cache",
+    "confirmed reset clears local data and remains empty after reload"
+  ],
+  "responsive": [
+    {
+      "width": 320,
+      "view": "home",
+      "scrollWidth": 320
+    },
+    {
+      "width": 320,
+      "view": "session",
+      "scrollWidth": 320
+    },
+    {
+      "width": 320,
+      "view": "journal",
+      "scrollWidth": 320
+    },
+    {
+      "width": 320,
+      "view": "lab",
+      "scrollWidth": 320
+    },
+    {
+      "width": 320,
+      "view": "settings",
+      "scrollWidth": 320
+    },
+    {
+      "width": 375,
+      "view": "home",
+      "scrollWidth": 375
+    },
+    {
+      "width": 375,
+      "view": "session",
+      "scrollWidth": 375
+    },
+    {
+      "width": 375,
+      "view": "journal",
+      "scrollWidth": 375
+    },
+    {
+      "width": 375,
+      "view": "lab",
+      "scrollWidth": 375
+    },
+    {
+      "width": 375,
+      "view": "settings",
+      "scrollWidth": 375
+    },
+    {
+      "width": 768,
+      "view": "home",
+      "scrollWidth": 768
+    },
+    {
+      "width": 768,
+      "view": "session",
+      "scrollWidth": 768
+    },
+    {
+      "width": 768,
+      "view": "journal",
+      "scrollWidth": 768
+    },
+    {
+      "width": 768,
+      "view": "lab",
+      "scrollWidth": 768
+    },
+    {
+      "width": 768,
+      "view": "settings",
+      "scrollWidth": 768
+    },
+    {
+      "width": 1024,
+      "view": "home",
+      "scrollWidth": 1024
+    },
+    {
+      "width": 1024,
+      "view": "session",
+      "scrollWidth": 1024
+    },
+    {
+      "width": 1024,
+      "view": "journal",
+      "scrollWidth": 1024
+    },
+    {
+      "width": 1024,
+      "view": "lab",
+      "scrollWidth": 1024
+    },
+    {
+      "width": 1024,
+      "view": "settings",
+      "scrollWidth": 1024
+    },
+    {
+      "width": 1440,
+      "view": "home",
+      "scrollWidth": 1440
+    },
+    {
+      "width": 1440,
+      "view": "session",
+      "scrollWidth": 1440
+    },
+    {
+      "width": 1440,
+      "view": "journal",
+      "scrollWidth": 1440
+    },
+    {
+      "width": 1440,
+      "view": "lab",
+      "scrollWidth": 1440
+    },
+    {
+      "width": 1440,
+      "view": "settings",
+      "scrollWidth": 1440
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "badResponses": []
+}

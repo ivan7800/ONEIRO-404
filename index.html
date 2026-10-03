@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ONEIRO 404" />
+  <meta name="description" content="ONEIRO 404 — laboratorio personal de sueños, diario y sesiones de incubación temática." />
+  <title>ONEIRO 404</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="./css/core.css" />
+  <link rel="stylesheet" href="./css/animations.css" />
+  <link rel="stylesheet" href="./css/themes.css" />
+</head>
+<body data-theme="void">
+  <a class="skip-link" href="#app">Saltar al contenido principal</a>
+  <div id="a11y-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="privacy-lock" class="privacy-lock" role="dialog" aria-modal="true" aria-labelledby="privacy-lock-title" hidden>
+    <form id="privacy-unlock-form" class="privacy-lock-card" autocomplete="off">
+      <span class="eyebrow">LOCAL PRIVACY LOCK</span>
+      <div class="privacy-lock-mark" aria-hidden="true">◉</div>
+      <h1 id="privacy-lock-title">ONEIRO BLOQUEADO</h1>
+      <p>Introduce tu PIN local. Este bloqueo protege la interfaz; no cifra por sí solo IndexedDB.</p>
+      <label>PIN
+        <input id="privacy-unlock-pin" class="text-input pin-input" type="password" inputmode="numeric" pattern="[0-9]*" minlength="4" maxlength="12" autocomplete="off" required />
+      </label>
+      <button class="btn primary" type="submit">DESBLOQUEAR</button>
+      <p id="privacy-unlock-status" class="status" role="status"></p>
+    </form>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" data-route="home" aria-label="Ir al inicio">
+        <span class="brand-mark">◉</span>
+        <span><strong>ONEIRO</strong><em>404</em></span>
+      </button>
+      <nav class="nav" aria-label="Navegación principal">
+        <button data-route="session">Sesión</button>
+        <button data-route="journal">Diario</button>
+        <button data-route="lab">Lab</button>
+        <button data-route="settings">Ajustes</button>
+      </nav>
+    </header>
+
+    <main id="app" class="view" tabindex="-1"></main>
+
+    <footer class="footer">
+      <span>ONEIRO 404 · v1.0.1</span>
+      <span class="desktop-hint" aria-hidden="true">Alt+1…5 · navegación</span><span id="clock">--:--</span>
+    </footer>
+  </div>
+
+  <template id="home-view">
+    <section class="hero">
+      <div class="eyebrow">DREAM INDUCTION SYSTEM</div>
+      <div class="orb-wrap" aria-hidden="true"><div class="orb"></div></div>
+      <h1>¿QUÉ QUIERES<br><span>SOÑAR ESTA NOCHE?</span></h1>
+      <p class="lede">Incubación temática, diario de sueños y exploración personal. ONEIRO puede orientar una sesión; no puede garantizar el contenido de un sueño.</p>
+      <div id="active-session-home" class="active-session-home" hidden></div>
+      <div class="hero-actions">
+        <button class="btn primary" data-route="session">INICIAR SESIÓN</button>
+        <button class="btn ghost" data-route="journal">ABRIR DIARIO</button>
+      </div>
+      <div class="stats-grid" id="home-stats"></div>
+    </section>
+  </template>
+
+  <template id="session-view">
+    <section class="session-shell">
+      <div id="session-builder-wrap">
+        <div class="section-head">
+          <span class="eyebrow">SESSION ENGINE</span>
+          <h1>Diseña la experiencia</h1>
+          <p>El flujo completo es PREPARE → PRIME → DESCENT → SLEEP → WAKE → RECALL. Los temporizadores se calculan con tiempo real para sobrevivir a bloqueos de pantalla o throttling del navegador.</p>
+        </div>
+        <div class="panel-grid session-config-grid">
+          <form id="session-form" class="card form-card">
+            <label>Modo
+              <select id="mode">
+                <option>Dream</option><option>Lucid</option><option>Nightmare</option><option>Liminal</option><option>Adventure</option><option>Memory</option><option>Custom</option>
+              </select>
+            </label>
+            <label>Intención
+              <textarea id="intention" rows="5" maxlength="300" placeholder="Ej.: una ciudad brutalista bajo la lluvia..."></textarea>
+            </label>
+            <label>Intensidad <output id="intensity-output">40%</output>
+              <input id="intensity" type="range" min="0" max="100" value="40" />
+            </label>
+            <label>Duración total
+              <select id="duration">
+                <option value="15">15 min</option>
+                <option value="30" selected>30 min</option>
+                <option value="60">60 min</option>
+                <option value="480">8 h</option>
+              </select>
+            </label>
+
+            <fieldset class="audio-config">
+              <legend>PAISAJE SONORO</legend>
+              <label class="toggle-row"><span>Audio procedural</span><input id="audio-enabled" type="checkbox" checked /></label>
+              <label>Volumen maestro <output id="master-volume-output">34%</output>
+                <input id="master-volume" type="range" min="0" max="70" value="34" />
+              </label>
+              <div class="audio-layer-grid" aria-label="Mezclador de capas">
+                <label>RAIN <input class="audio-layer" data-layer="rain" type="range" min="0" max="100" value="100" /></label>
+                <label>WIND <input class="audio-layer" data-layer="wind" type="range" min="0" max="100" value="100" /></label>
+                <label>PINK <input class="audio-layer" data-layer="pink" type="range" min="0" max="100" value="100" /></label>
+                <label>BROWN <input class="audio-layer" data-layer="brown" type="range" min="0" max="100" value="100" /></label>
+                <label>DRONE <input class="audio-layer" data-layer="drone" type="range" min="0" max="100" value="100" /></label>
+              </div>
+              <div class="button-row compact-buttons">
+                <button class="btn ghost" id="preview-audio" type="button">PROBAR PAISAJE</button>
+                <button class="btn ghost" id="stop-audio-preview" type="button">SILENCIO</button>
+              </div>
+              <p id="audio-status" class="audio-status" role="status">El audio se genera localmente con Web Audio API.</p>
+            </fieldset>
+
+            <div id="plan-preview" class="plan-preview" aria-live="polite"></div>
+            <div class="button-row">
+              <button class="btn primary" type="submit">INICIAR SESIÓN</button>
+              <button class="btn ghost" id="save-session-config" type="button">GUARDAR</button>
+            </div>
+            <p id="session-status" class="status" role="status"></p>
+          </form>
+          <aside class="card warning-card">
+            <span class="eyebrow">SAFE MODE</span>
+            <h3>Nightmare ≠ privación de sueño</h3>
+            <p>ONEIRO 404 no utiliza sobresaltos, volúmenes extremos ni patrones diseñados para interrumpir el descanso. Si un protocolo resulta desagradable, termínalo.</p>
+            <hr />
+            <span class="eyebrow">PHASE 3 · AUDIO ENGINE</span>
+            <p>RAIN, WIND, PINK/BROWN NOISE y DRONE se sintetizan en el navegador. No se descargan pistas ni se usan CDN.</p>
+            <p class="micro-note">Algunos móviles suspenden Web Audio al bloquear la pantalla. ONEIRO detecta el estado cuando el navegador lo comunica y permite reactivarlo manualmente.</p>
+          </aside>
+        </div>
+      </div>
+
+      <div id="session-live" class="session-live" hidden>
+        <div class="phase-rail" id="phase-rail" role="list" aria-label="Progreso de la sesión"></div>
+        <div class="live-core">
+          <span id="live-mode" class="eyebrow"></span>
+          <div id="live-phase" class="phase-name">PRIME</div>
+          <div class="phase-orb" aria-hidden="true"><span></span></div>
+          <h2 id="live-title">Mantén una sola intención.</h2>
+          <p id="live-guidance" class="live-guidance"></p>
+          <blockquote id="live-intention" class="intention-quote"></blockquote>
+          <div id="live-timer" class="live-timer" role="timer" aria-label="Tiempo restante" aria-live="off">00:00</div>
+          <div class="progress-track" aria-hidden="true"><span id="live-progress"></span></div>
+          <p id="live-state" class="live-state"></p>
+          <div id="live-audio-strip" class="live-audio-strip">
+            <span id="live-audio-indicator" class="audio-dot" aria-hidden="true"></span>
+            <span id="live-audio-status">Audio preparado</span>
+            <button id="reactivate-audio" class="mini-action" type="button">REACTIVAR AUDIO</button>
+          </div>
+          <div class="live-controls" id="live-controls">
+            <button id="pause-session" class="btn ghost" type="button">PAUSAR</button>
+            <button id="audio-session-toggle" class="btn ghost" type="button">AUDIO ON</button>
+            <button id="skip-phase" class="btn ghost" type="button">SALTAR FASE</button>
+            <button id="end-session" class="btn danger" type="button">TERMINAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="session-recall" class="session-recall" hidden>
+        <div class="section-head recall-head">
+          <span class="eyebrow">RECALL</span>
+          <h2>No te muevas todavía.</h2>
+          <p>Busca primero una imagen, una emoción o un lugar. Después escribe lo que quede. El recuerdo se archivará directamente en Dream Journal.</p>
+        </div>
+        <form id="recall-form" class="card recall-card">
+          <label>Título opcional
+            <input id="recall-title" type="text" maxlength="120" placeholder="Ej.: El hotel sumergido" />
+          </label>
+          <label>¿Qué recuerdas?
+            <textarea id="recall-text" rows="8" maxlength="12000" placeholder="Empieza por cualquier fragmento..."></textarea>
+          </label>
+          <div class="recall-metrics">
+            <label>Claridad del recuerdo <output id="vividness-output">50%</output>
+              <input id="vividness" type="range" min="0" max="100" value="50" />
+            </label>
+            <label>Intensidad emocional <output id="dream-intensity-output">50%</output>
+              <input id="dream-intensity" type="range" min="0" max="100" value="50" />
+            </label>
+            <label>Lucidez <output id="lucidity-output">0%</output>
+              <input id="recall-lucidity" type="range" min="0" max="100" value="0" />
+            </label>
+          </div>
+          <details class="recall-details">
+            <summary>Añadir detalles</summary>
+            <div class="metadata-grid">
+              <label>Emociones <input id="recall-emotions" type="text" maxlength="300" placeholder="miedo, curiosidad, calma" /></label>
+              <label>Lugares <input id="recall-places" type="text" maxlength="300" placeholder="hotel, pasillo, océano" /></label>
+              <label>Personas <input id="recall-people" type="text" maxlength="300" placeholder="mujer desconocida, amigo" /></label>
+              <label>Símbolos <input id="recall-symbols" type="text" maxlength="300" placeholder="puerta roja, llave" /></label>
+              <label class="wide-field">Etiquetas <input id="recall-tags" type="text" maxlength="300" placeholder="recurrente, agua, persecución" /></label>
+            </div>
+          </details>
+          <div class="button-row">
+            <button class="btn primary" type="submit">GUARDAR EN DREAM JOURNAL</button>
+            <button class="btn ghost" id="discard-recall" type="button">CERRAR SIN TEXTO</button>
+          </div>
+          <p id="recall-status" class="status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </template>
+
+  <template id="journal-view">
+    <section class="journal-shell">
+      <div class="section-head journal-heading">
+        <div>
+          <span class="eyebrow">DREAM JOURNAL · INDEXEDDB</span>
+          <h1>Recuerda antes de interpretar</h1>
+          <p>Tu archivo onírico vive en este navegador. Busca por texto, personas, lugares, emociones, símbolos o etiquetas; ONEIRO no interpreta automáticamente tus sueños.</p>
+        </div>
+        <button id="new-dream" class="btn primary" type="button">+ NUEVO SUEÑO</button>
+      </div>
+
+      <div class="card journal-toolbar" aria-label="Filtros del diario">
+        <label class="journal-search">Buscar
+          <input id="journal-search" type="search" autocomplete="off" placeholder="puerta, hotel, lluvia, una frase..." />
+        </label>
+        <label>Modo
+          <select id="journal-mode-filter">
+            <option value="all">Todos</option>
+            <option>Dream</option><option>Lucid</option><option>Nightmare</option><option>Liminal</option><option>Adventure</option><option>Memory</option><option>Custom</option><option>Manual</option>
+          </select>
+        </label>
+        <label>Lucidez
+          <select id="journal-lucid-filter"><option value="all">Todos</option><option value="yes">Lúcidos</option><option value="no">No lúcidos</option></select>
+        </label>
+        <label>Orden
+          <select id="journal-sort"><option value="newest">Más recientes</option><option value="oldest">Más antiguos</option><option value="vividness">Mayor recuerdo</option><option value="lucidity">Mayor lucidez</option></select>
+        </label>
+        <button id="clear-journal-filters" class="btn ghost compact-control" type="button">LIMPIAR</button>
+      </div>
+
+      <div id="journal-summary" class="journal-summary" aria-live="polite"></div>
+      <p id="journal-status" class="status" role="status"></p>
+
+      <div class="journal-layout">
+        <div>
+          <div id="journal-list" class="journal-list"></div>
+          <div id="journal-empty" class="card empty-state" hidden>
+            <div class="glyph">◌</div>
+            <h3>Aún no hay sueños aquí</h3>
+            <p>Guarda un RECALL tras una sesión o crea una entrada manual.</p>
+            <button class="btn ghost" type="button" data-journal-action="new">CREAR PRIMERA ENTRADA</button>
+          </div>
+        </div>
+
+        <aside id="journal-editor" class="card journal-editor" aria-labelledby="journal-editor-title" hidden>
+          <div class="editor-head">
+            <div><span class="eyebrow">ENTRY EDITOR</span><h3 id="journal-editor-title">Nuevo sueño</h3></div>
+            <button id="close-journal-editor" class="icon-button" type="button" aria-label="Cerrar editor">×</button>
+          </div>
+          <form id="journal-form" class="journal-form">
+            <input id="journal-id" type="hidden" />
+            <input id="journal-created-at" type="hidden" />
+            <input id="journal-session-id" type="hidden" />
+            <input id="journal-source" type="hidden" />
+            <label>Título
+              <input id="journal-title" type="text" maxlength="120" placeholder="El hotel sumergido" />
+            </label>
+            <label>Fecha y hora del sueño
+              <input id="journal-dream-at" type="datetime-local" />
+            </label>
+            <label>Relato
+              <textarea id="journal-text" rows="10" maxlength="12000" placeholder="Escribe lo que recuerdes sin intentar rellenar los huecos..."></textarea>
+            </label>
+            <div class="metadata-grid">
+              <label>Modo
+                <select id="journal-mode"><option>Manual</option><option>Dream</option><option>Lucid</option><option>Nightmare</option><option>Liminal</option><option>Adventure</option><option>Memory</option><option>Custom</option></select>
+              </label>
+              <label>Claridad <output id="journal-vividness-output">50%</output><input id="journal-vividness" type="range" min="0" max="100" value="50" /></label>
+              <label>Intensidad <output id="journal-intensity-output">50%</output><input id="journal-intensity" type="range" min="0" max="100" value="50" /></label>
+              <label>Lucidez <output id="journal-lucidity-output">0%</output><input id="journal-lucidity" type="range" min="0" max="100" value="0" /></label>
+            </div>
+            <label>Intención de la sesión
+              <input id="journal-intention" type="text" maxlength="600" placeholder="Opcional" />
+            </label>
+            <div class="metadata-grid">
+              <label>Emociones <input id="journal-emotions" type="text" maxlength="500" placeholder="miedo, curiosidad" /></label>
+              <label>Lugares <input id="journal-places" type="text" maxlength="500" placeholder="hotel, bosque" /></label>
+              <label>Personas <input id="journal-people" type="text" maxlength="500" placeholder="persona desconocida" /></label>
+              <label>Símbolos <input id="journal-symbols" type="text" maxlength="500" placeholder="puerta, llave" /></label>
+              <label class="wide-field">Etiquetas <input id="journal-tags" type="text" maxlength="500" placeholder="recurrente, agua, vuelo" /></label>
+            </div>
+            <label>Notas privadas
+              <textarea id="journal-notes" rows="4" maxlength="4000" placeholder="Observaciones posteriores, sin alterar el relato original..."></textarea>
+            </label>
+            <div class="button-row">
+              <button class="btn primary" type="submit">GUARDAR ENTRADA</button>
+              <button id="delete-journal-entry" class="btn danger" type="button">ELIMINAR</button>
+            </div>
+            <p id="journal-form-status" class="status" role="status"></p>
+          </form>
+        </aside>
+      </div>
+    </section>
+  </template>
+
+  <template id="lab-view">
+    <section class="lab-shell">
+      <div class="section-head lab-heading">
+        <div>
+          <span class="eyebrow">ONEIRO LAB · DREAM DNA</span>
+          <h1>Patrones, no supersticiones</h1>
+          <p>ONEIRO resume lo que aparece en tu propio diario. Las recurrencias y coincidencias son descriptivas: no asignan significados universales ni demuestran que una sesión haya causado un sueño.</p>
+        </div>
+        <label class="lab-window">PERIODO
+          <select id="lab-window">
+            <option value="all">Todo el historial</option>
+            <option value="30">Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option>
+            <option value="365">Último año</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="lab-empty" class="card lab-empty" hidden>
+        <span class="eyebrow">SIN MUESTRA</span>
+        <h3>Dream DNA necesita recuerdos.</h3>
+        <p>Registra al menos un sueño para empezar. Con 3 entradas aparecen patrones preliminares; con 5 o más la lectura estadística empieza a ser más útil.</p>
+        <button class="btn primary" type="button" data-route="journal">ABRIR DREAM JOURNAL</button>
+      </div>
+
+      <div id="lab-content">
+        <div class="cards-4 lab-metrics">
+          <article class="card metric"><span>RECALL MEDIO</span><strong id="lab-recall">—</strong><small id="lab-recall-note">sin datos</small></article>
+          <article class="card metric"><span>SUEÑOS LÚCIDOS</span><strong id="lab-lucid">—</strong><small id="lab-lucid-note">sin datos</small></article>
+          <article class="card metric"><span>ASOCIACIÓN</span><strong id="lab-association">—</strong><small id="lab-association-note">sin intenciones comparables</small></article>
+          <article class="card metric"><span>MUESTRA</span><strong id="lab-sample">0</strong><small id="lab-confidence">insuficiente</small></article>
+        </div>
+
+        <div class="lab-grid-main">
+          <article class="card dna-card">
+            <div class="card-title-row"><div><span class="eyebrow">YOUR DREAM DNA</span><h3>Elementos recurrentes</h3></div><span id="dna-sample" class="data-badge">0 sueños</span></div>
+            <div id="dream-dna" class="dna-list"></div>
+            <p class="lab-footnote">El porcentaje indica en qué proporción de sueños aparece cada elemento, no cuántas veces se escribió dentro de un mismo sueño.</p>
+          </article>
+
+          <article class="card trend-card">
+            <div class="card-title-row"><div><span class="eyebrow">8 WEEK SIGNAL</span><h3>Actividad reciente</h3></div><div class="trend-legend"><span>Recall</span><span>Sueños</span></div></div>
+            <div id="lab-trend" class="trend-chart" role="img" aria-label="Tendencia de sueños y recuerdo durante ocho semanas"></div>
+            <p class="lab-footnote">Las semanas vacías se conservan para no convertir ausencia de datos en una tendencia falsa.</p>
+          </article>
+        </div>
+
+        <div class="lab-grid-secondary">
+          <article class="card">
+            <div class="card-title-row"><div><span class="eyebrow">PROTOCOLS</span><h3>Rendimiento observado</h3></div></div>
+            <div id="lab-modes" class="mode-table"></div>
+          </article>
+          <article class="card">
+            <div class="card-title-row"><div><span class="eyebrow">TARGET MATCH</span><h3>Intención ↔ recuerdo</h3></div></div>
+            <div id="lab-association-detail" class="association-detail"></div>
+            <p class="lab-footnote">Coincidencia de palabras relevantes entre la intención escrita y el recuerdo/etiquetas. Sirve para explorar tu historial; no prueba inducción.</p>
+          </article>
+        </div>
+
+        <article class="card dream-map-card">
+          <div class="card-title-row"><div><span class="eyebrow">DREAM MAP</span><h3>Constelación de coapariciones</h3></div><span id="map-count" class="data-badge">0 nodos</span></div>
+          <div class="dream-map-toolbar"><label>CATEGORÍA <select id="map-category"><option value="all">Todas</option><option value="Símbolos">Símbolos</option><option value="Lugares">Lugares</option><option value="Emociones">Emociones</option><option value="Personas">Personas</option><option value="Etiquetas">Etiquetas</option></select></label><button id="map-reset" class="btn ghost" type="button">REINICIAR MAPA</button></div>
+          <div class="dream-map-layout"><div id="dream-map" class="dream-map" role="region" aria-label="Mapa interactivo de elementos que aparecen juntos en los sueños"></div><aside id="map-inspector" class="map-inspector" aria-live="polite"><span class="eyebrow">SELECT NODE</span><h4>Explora tu constelación</h4><p>Pulsa un nodo para ver su frecuencia, conexiones y sueños relacionados.</p></aside></div>
+          <p class="lab-footnote">Una línea significa que dos elementos aparecen en el mismo sueño. Su grosor refleja cuántos recuerdos comparten; no implica relación causal ni significado psicológico.</p>
+        </article>
+
+        <article class="card recurrence-card">
+          <div class="card-title-row"><div><span class="eyebrow">RECURRENCES</span><h3>Lo que vuelve</h3></div><span id="recurrence-count" class="data-badge">0 patrones</span></div>
+          <div id="lab-recurrences" class="recurrence-columns"></div>
+        </article>
+
+        <p id="lab-status" class="status" role="status"></p>
+      </div>
+    </section>
+  </template>
+
+  <template id="settings-view">
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">SETTINGS</span>
+        <h1>Interfaz y privacidad</h1>
+      </div>
+      <div class="settings-grid">
+        <article class="card settings-list">
+          <div class="settings-card-head"><span class="eyebrow">APPEARANCE</span><h3>Identidad visual</h3></div>
+          <label>Skin
+            <select id="theme-select">
+              <option value="void">VOID</option>
+              <option value="oneiric">ONEIRIC</option>
+              <option value="liminal">LIMINAL</option>
+              <option value="soma">SOMA</option>
+              <option value="terminal">TERMINAL</option>
+              <option value="nocturne">NOCTURNE</option>
+              <option value="dreamcore">DREAMCORE</option>
+            </select>
+          </label>
+          <label class="toggle-row"><span>Movimiento reducido</span><input id="reduced-motion" type="checkbox" /></label>
+          <label class="toggle-row"><span>Contraste reforzado</span><input id="high-contrast" type="checkbox" /></label>
+          <label class="toggle-row"><span>Texto grande</span><input id="large-text" type="checkbox" /></label>
+          <p class="micro-note">ONEIRO también respeta <code>prefers-reduced-motion</code> y <code>prefers-contrast</code> cuando no has activado una preferencia más restrictiva.</p>
+          <div class="theme-preview" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </article>
+
+        <article class="card settings-list privacy-settings">
+          <div class="settings-card-head"><span class="eyebrow">PRIVACY</span><h3>Bloqueo local</h3></div>
+          <p class="muted-copy no-margin">El PIN impide abrir ONEIRO desde esta interfaz. No sustituye el cifrado del perfil del navegador ni del dispositivo.</p>
+          <div class="privacy-state"><span>Estado</span><strong id="privacy-lock-state">Sin bloqueo</strong></div>
+          <div class="pin-grid">
+            <label>PIN actual
+              <input id="privacy-current-pin" class="text-input" type="password" inputmode="numeric" maxlength="12" autocomplete="off" />
+            </label>
+            <label>PIN nuevo
+              <input id="privacy-new-pin" class="text-input" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password" placeholder="4–12 dígitos" />
+            </label>
+            <label>Repetir PIN
+              <input id="privacy-confirm-pin" class="text-input" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password" />
+            </label>
+          </div>
+          <div class="button-row compact-buttons">
+            <button id="privacy-save-pin" class="btn primary" type="button">ACTIVAR / CAMBIAR PIN</button>
+            <button id="privacy-disable-pin" class="btn ghost" type="button">QUITAR PIN</button>
+            <button id="privacy-lock-now" class="btn ghost" type="button">BLOQUEAR AHORA</button>
+          </div>
+          <label>Bloqueo automático
+            <select id="privacy-auto-lock">
+              <option value="0">Desactivado</option>
+              <option value="1">Tras 1 minuto</option>
+              <option value="5">Tras 5 minutos</option>
+              <option value="15">Tras 15 minutos</option>
+              <option value="30">Tras 30 minutos</option>
+            </select>
+          </label>
+          <label class="toggle-row"><span>Ocultar previews del diario</span><input id="privacy-hide-previews" type="checkbox" /></label>
+          <label class="toggle-row"><span>Difuminar al ocultar la pestaña</span><input id="privacy-blur-hidden" type="checkbox" /></label>
+          <p id="privacy-settings-status" class="status" role="status"></p>
+        </article>
+
+        <article class="card settings-list backup-settings">
+          <div class="settings-card-head"><span class="eyebrow">BACKUP / RESTORE</span><h3>Tu archivo ONEIRO</h3></div>
+          <div class="storage-health"><span>Web Crypto</span><strong id="crypto-status">Comprobando…</strong></div>
+          <div class="storage-health"><span>Cifrado</span><strong>AES-256-GCM + PBKDF2</strong></div>
+          <p class="muted-copy no-margin">El JSON normal contiene el diario en texto legible. Para datos personales, usa preferentemente el backup cifrado.</p>
+          <label>Contraseña del backup cifrado
+            <input id="backup-passphrase" class="text-input" type="password" minlength="8" autocomplete="new-password" placeholder="mínimo 8 caracteres" />
+          </label>
+          <div class="button-row compact-buttons">
+            <button id="backup-export-json" class="btn ghost" type="button">EXPORTAR JSON</button>
+            <button id="backup-export-encrypted" class="btn primary" type="button">BACKUP CIFRADO</button>
+          </div>
+          <hr />
+          <label>Modo de restauración
+            <select id="backup-restore-mode"><option value="merge">Combinar · conserva lo local más reciente</option><option value="replace">Reemplazar todos los datos ONEIRO</option></select>
+          </label>
+          <input id="backup-file" type="file" accept=".json,.oneiro,application/json" hidden />
+          <button id="backup-import" class="btn ghost" type="button">IMPORTAR BACKUP</button>
+          <div id="backup-summary" class="backup-summary" hidden></div>
+          <p id="backup-status" class="status" role="status"></p>
+        </article>
+
+        <article class="card settings-list pwa-settings">
+          <div class="settings-card-head"><span class="eyebrow">PWA / OFFLINE</span><h3>Instalación y persistencia</h3></div>
+          <div class="storage-health"><span>Conexión</span><strong id="network-status">Comprobando…</strong></div>
+          <div class="storage-health"><span>Service Worker</span><strong id="sw-status">Comprobando…</strong></div>
+          <div class="storage-health"><span>Almacenamiento</span><strong id="storage-persist-status">Comprobando…</strong></div>
+          <div class="storage-health"><span>Uso local</span><strong id="storage-usage">—</strong></div>
+          <div class="button-row compact-buttons">
+            <button id="pwa-install" class="btn primary" type="button" hidden>INSTALAR ONEIRO</button>
+            <button id="storage-persist" class="btn ghost" type="button">PROTEGER ALMACENAMIENTO</button>
+          </div>
+          <p class="muted-copy no-margin">El modo offline depende de haber cargado ONEIRO al menos una vez. La persistencia reduce el riesgo de que el navegador elimine datos bajo presión de espacio, pero no sustituye un backup.</p>
+          <p id="pwa-status" class="status" role="status"></p>
+        </article>
+
+        <article class="card settings-list danger-zone">
+          <div class="settings-card-head"><span class="eyebrow">LOCAL DATA</span><h3>Datos del navegador</h3></div>
+          <div class="storage-health"><span>Dream Journal</span><strong id="journal-db-status">Comprobando IndexedDB…</strong></div>
+          <button id="reset-local" class="btn danger" type="button">BORRAR DATOS LOCALES</button>
+          <p class="muted-copy no-margin">Borra configuración, sesiones, Dream Journal y ajustes de privacidad de este origen.</p>
+        </article>
+      </div>
+      <p id="settings-status" class="status settings-global-status" role="status"></p>
+    </section>
+  </template>
+
+  <script src="./js/storage.js" defer></script>
+  <script src="./js/audio-engine.js" defer></script>
+  <script src="./js/journal-core.js" defer></script>
+  <script src="./js/journal-db.js" defer></script>
+  <script src="./js/analytics-core.js" defer></script>
+  <script src="./js/privacy.js" defer></script>
+  <script src="./js/backup.js" defer></script>
+  <script src="./js/session-engine.js" defer></script>
+  <script src="./js/accessibility.js" defer></script>
+  <script src="./js/router.js" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

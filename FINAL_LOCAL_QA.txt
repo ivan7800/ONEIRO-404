@@ -1,0 +1,47 @@
+FINAL-GITHUB local recheck — 2026-10-03
+Environment note: managed Chromium blocks loopback URLs; real-browser-e2e.py and storage-browser-faults.py are therefore delegated to GitHub Actions.
+
+RUN analytics-core.test.js
+PASS analytics-core
+RUN audio-engine.test.js
+PASS audio-engine: prefs, safety clamps, presets, phase scaling and layer mixer
+RUN backup.test.js
+PASS backup
+RUN dream-map.test.js
+PASS dream-map
+RUN hardening.test.js
+PASS hardening: encrypted 800 KB, KDF bounds, old backup PIN, quota failure rollback, recovery snapshot, duplicate IDs, deleted-session migration, failed PIN write
+RUN journal-core.test.js
+PASS journal-core: {
+  count: 3,
+  avgVividness: 63,
+  avgIntensity: 17,
+  avgLucidity: 22,
+  lucidCount: 1,
+  lucidRate: 33
+}
+RUN journal-db.test.js
+PASS journal-db: idempotent legacy migration and empty recall skip
+RUN privacy.test.js
+PASS privacy
+RUN pwa-static.test.js
+PASS pwa-static
+RUN session-engine.test.js
+PASS session-engine: plan, transitions, pause/resume, paused-skip regression, recall, archive and timestamp catch-up
+RUN accessibility-static.test.py
+PASS accessibility-static {'ids': 162, 'controls_named': True, 'buttons_named': True}
+RUN contrast.test.py
+PASS contrast {'void': {'text/bg': 17.69, 'muted/panel2': 5.18, 'accent/panel2': 6.92}, 'oneiric': {'text/bg': 17.9, 'muted/panel2': 5.91, 'accent/panel2': 8.74}, 'liminal': {'text/bg': 16.13, 'muted/panel2': 6.26, 'accent/panel2': 10.32}, 'soma': {'text/bg': 17.01, 'muted/panel2': 5.69, 'accent/panel2': 6.92}, 'terminal': {'text/bg': 17.68, 'muted/panel2': 4.78, 'accent/panel2': 14.27}, 'nocturne': {'text/bg': 17.58, 'muted/panel2': 5.55, 'accent/panel2': 7.3}, 'dreamcore': {'text/bg': 18.89, 'muted/panel2': 6.15, 'accent/panel2': 14.36}}
+RUN security-static.test.py
+PASS security-static
+RUN controls-ui-smoke.py
+PASS controls-ui-smoke {"checks": ["routes", "session-controls", "discard-recall", "journal-controls", "lab-controls", "settings-controls"], "downloads": ["ONEIRO-404_2026-10-03T17-53-13-047Z.json", "ONEIRO-404_2026-10-03T17-53-13-095Z.oneiro.json"], "errors": 0}
+RUN lab-ui-smoke.py
+PASS lab-ui-smoke {"initial": {"recall": "65%", "lucid": "33%", "association": "80%", "sample": "6", "dna": 16, "modes": 4, "recurrences": 1, "trend": 8, "contentHidden": false, "emptyHidden": true}, "filtered": {"sample": "5", "recall": "68%"}, "empty": {"emptyHidden": false, "contentHidden": true}}
+RUN privacy-ui-smoke.py
+PASS privacy-ui-smoke {"crypto": false, "theme": "dreamcore", "hiddenPreviews": true, "highContrast": true, "largeText": true}
+RUN responsive-ui-smoke.py
+PASS responsive-ui-smoke {"home-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "session-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": 16}, "journal-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": 16}, "lab-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "settings-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "landscape": {"innerWidth": 844, "scrollWidth": 844, "nav": [44, 44, 44, 44], "navPosition": "static", "textInputFont": 14.4}}
+RUN xss-ui-smoke.py
+PASS xss-ui-smoke {'xss': 0, 'imgs': 0, 'scripts': 0, 'text': True}
+PASS local FINAL-GITHUB recheck: 18 scripts

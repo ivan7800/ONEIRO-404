@@ -1,0 +1,15 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const root=path.resolve(__dirname,'..');
+const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8');
+const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'),'utf8'));
+assert(sw.includes("oneiro-404-v1.0.1-final"));
+assert(sw.includes("'./js/backup.js'"));
+assert(sw.includes("'./js/accessibility.js'"));
+assert.equal(manifest.display,'standalone');
+assert(manifest.icons.some(i=>i.src.includes('icon-192.png')&&i.sizes==='192x192'));
+assert(manifest.icons.some(i=>i.src.includes('icon-512.png')&&i.sizes==='512x512'));
+assert(sw.includes('apple-touch-icon.png'));
+assert.equal(manifest.shortcuts.length,2);
+const refs=[...sw.matchAll(/'\.\/([^']+)'/g)].map(m=>m[1]).filter(x=>x&&!x.endsWith('/'));
+for(const ref of refs)assert(fs.existsSync(path.join(root,ref)),`missing ${ref}`);
+console.log('PASS pwa-static');

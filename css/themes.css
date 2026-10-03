@@ -1,0 +1,19 @@
+body[data-theme="void"]{--bg:#050505;--panel:#0b0b0d;--panel2:#111116;--text:#f0efe9;--muted:#87858e;--accent:#a78bfa;--accent2:#6d5dfc;--line:#242329;--danger:#ff6b6b}
+body[data-theme="oneiric"]{--bg:#090610;--panel:#120d1d;--panel2:#1a1228;--text:#f6efff;--muted:#a08cae;--accent:#d99cff;--accent2:#7c4dff;--line:#342442;--danger:#ff7f9e}
+body[data-theme="liminal"]{--bg:#11100b;--panel:#19170f;--panel2:#242117;--text:#f2edcf;--muted:#aaa27d;--accent:#e9ce61;--accent2:#b59b35;--line:#3a3523;--danger:#f28262}
+body[data-theme="soma"]{--bg:#0b0506;--panel:#15090b;--panel2:#210d10;--text:#f7e8e8;--muted:#ad8488;--accent:#ff6f7d;--accent2:#b81f39;--line:#3c1b20;--danger:#ff5368}
+body[data-theme="terminal"]{--bg:#020603;--panel:#051008;--panel2:#08150c;--text:#baffc6;--muted:#5e8b68;--accent:#56ff82;--accent2:#0fc846;--line:#12331d;--danger:#ff7373}
+body[data-theme="nocturne"]{--bg:#030712;--panel:#08111f;--panel2:#0c1729;--text:#e8f0ff;--muted:#8290a7;--accent:#67a7ff;--accent2:#365cff;--line:#18253a;--danger:#ff758f}
+body[data-theme="dreamcore"]{--bg:#08070c;--panel:#11101a;--panel2:#191728;--text:#fff5ff;--muted:#a692ae;--accent:#6fffe9;--accent2:#ff79d1;--line:#302a3d;--danger:#ff6b8f}
+
+body[data-theme="liminal"] .noise{opacity:.08;mix-blend-mode:screen}
+body[data-theme="terminal"]{font-family:"Courier New",ui-monospace,monospace}
+body[data-theme="terminal"] .orb{filter:saturate(.45) contrast(1.15)}
+body[data-theme="dreamcore"] .orb{background:radial-gradient(circle at 38% 32%,#fff 0 1%,var(--accent) 5%,color-mix(in srgb,var(--accent2) 48%,#12101e) 32%,#050507 72%)}
+body[data-theme="soma"] .orb{filter:saturate(.9) contrast(1.05)}
+
+/* Phase 9 — optional/system high contrast */
+body.high-contrast{--muted:#c8c6cf!important;--line:#5a5863!important;--panel:#0b0b0d!important;--panel2:#17171c!important}
+body.high-contrast .eyebrow{color:color-mix(in srgb,var(--accent) 76%,white)}
+body.high-contrast .btn.ghost,body.high-contrast select,body.high-contrast textarea,body.high-contrast .text-input{border-color:var(--line)}
+html.large-text-root{font-size:112.5%}

@@ -1,0 +1,48 @@
+RUN analytics-core.test.js
+PASS analytics-core
+RUN audio-engine.test.js
+PASS audio-engine: prefs, safety clamps, presets, phase scaling and layer mixer
+RUN backup.test.js
+PASS backup
+RUN dream-map.test.js
+PASS dream-map
+RUN hardening.test.js
+PASS hardening: encrypted 800 KB, KDF bounds, old backup PIN, quota failure rollback, recovery snapshot, duplicate IDs, deleted-session migration, failed PIN write
+RUN journal-core.test.js
+PASS journal-core: {
+  count: 3,
+  avgVividness: 63,
+  avgIntensity: 17,
+  avgLucidity: 22,
+  lucidCount: 1,
+  lucidRate: 33
+}
+RUN journal-db.test.js
+PASS journal-db: idempotent legacy migration and empty recall skip
+RUN privacy.test.js
+PASS privacy
+RUN pwa-static.test.js
+PASS pwa-static
+RUN session-engine.test.js
+PASS session-engine: plan, transitions, pause/resume, paused-skip regression, recall, archive and timestamp catch-up
+RUN accessibility-static.test.py
+PASS accessibility-static {'ids': 162, 'controls_named': True, 'buttons_named': True}
+RUN contrast.test.py
+PASS contrast {'void': {'text/bg': 17.69, 'muted/panel2': 5.18, 'accent/panel2': 6.92}, 'oneiric': {'text/bg': 17.9, 'muted/panel2': 5.91, 'accent/panel2': 8.74}, 'liminal': {'text/bg': 16.13, 'muted/panel2': 6.26, 'accent/panel2': 10.32}, 'soma': {'text/bg': 17.01, 'muted/panel2': 5.69, 'accent/panel2': 6.92}, 'terminal': {'text/bg': 17.68, 'muted/panel2': 4.78, 'accent/panel2': 14.27}, 'nocturne': {'text/bg': 17.58, 'muted/panel2': 5.55, 'accent/panel2': 7.3}, 'dreamcore': {'text/bg': 18.89, 'muted/panel2': 6.15, 'accent/panel2': 14.36}}
+RUN security-static.test.py
+PASS security-static
+RUN controls-ui-smoke.py
+PASS controls-ui-smoke {"checks": ["routes", "session-controls", "discard-recall", "journal-controls", "lab-controls", "settings-controls"], "downloads": ["ONEIRO-404_2026-10-03T17-31-47-525Z.json", "ONEIRO-404_2026-10-03T17-31-47-563Z.oneiro.json"], "errors": 0}
+RUN lab-ui-smoke.py
+PASS lab-ui-smoke {"initial": {"recall": "65%", "lucid": "33%", "association": "80%", "sample": "6", "dna": 16, "modes": 4, "recurrences": 1, "trend": 8, "contentHidden": false, "emptyHidden": true}, "filtered": {"sample": "5", "recall": "68%"}, "empty": {"emptyHidden": false, "contentHidden": true}}
+RUN privacy-ui-smoke.py
+PASS privacy-ui-smoke {"crypto": false, "theme": "dreamcore", "hiddenPreviews": true, "highContrast": true, "largeText": true}
+RUN responsive-ui-smoke.py
+PASS responsive-ui-smoke {"home-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "session-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": 16}, "journal-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": 16}, "lab-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "settings-view": {"innerWidth": 320, "scrollWidth": 320, "nav": [44, 44, 44, 44], "navPosition": "fixed", "textInputFont": null}, "landscape": {"innerWidth": 844, "scrollWidth": 844, "nav": [44, 44, 44, 44], "navPosition": "static", "textInputFont": 14.4}}
+RUN xss-ui-smoke.py
+PASS xss-ui-smoke {'xss': 0, 'imgs': 0, 'scripts': 0, 'text': True}
+RUN real-browser-e2e.py
+PASS real-browser-e2e {"browser": "134.0.6998.35", "checks": ["production boot, local scripts, CSP, IndexedDB and real Service Worker", "25 live view/viewport combinations without horizontal overflow", "empty session validation, configuration save, real Web Audio preview/silence", "six protocols start and terminate independently", "Lucid pause/skip, reload, resume, audio toggle, timed phases and recall in IndexedDB", "delete session dream remains deleted after reload and legacy migration", "journal empty validation, create/edit, XSS text, search/filter/sort/clear and editor close", "double journal submission creates one entry", "real Lab statistics, time window, map node, category and reset", "seven skins, privacy/visual preferences, 320px large text, PIN mismatch, lock and wrong/right unlock", "actual JSON/encrypted downloads and UI replace/merge restore with real Crypto and PIN retained", "disable PIN, request storage persistence with actual browser decision", "keyboard routes, search shortcut, editor focus and Escape return", "offline reload, IndexedDB preserved and five routes via real cache", "confirmed reset clears local data and remains empty after reload"], "responsiveCombinations": 25, "errors": 0}
+RUN storage-browser-faults.py
+PASS storage-browser-faults: fresh empty backup, PIN quota rejected, reset DB failure retains data/PIN, replace rollback in real IndexedDB, reset with stale readiness flag; errors=0
+PASS suite: 20 test scripts
